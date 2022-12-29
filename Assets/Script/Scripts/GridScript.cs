@@ -6,6 +6,7 @@ public class GridScript : MonoBehaviour
 {
     private int id;
     private Vector2 gridPos;
+    private int distance = 0;
 
     [Header("Grid Color")]
     [SerializeField] private Color selectColor;
@@ -45,10 +46,30 @@ public class GridScript : MonoBehaviour
         }
     }
 
+    public int _distance
+    {
+        get
+        {
+            return distance;
+        }
+    }
+
 
     private void GridPos(Vector2 pos)
     {
         gridPos = pos;
+    }
+
+    private void SetDistance(Vector2 start)
+    {
+        Vector2 v = start - gridPos;
+
+        distance = (int)(Mathf.Abs(v.x) * (int)Mathf.Abs(v.x) + Mathf.Abs(v.y) * Mathf.Abs(v.y));
+    }
+
+    private void IncreaseDistance(int value)
+    {
+        distance += value;
     }
 
     private void ChangeColorSelect()
@@ -75,9 +96,51 @@ public class GridScript : MonoBehaviour
         neighbourIDs.Add(id);
     }
 
-    protected internal List<int> GetNeighbour()
+    protected internal List<int> GetNeighbour(int specialGrid)
     {
-        return neighbourIDs;
+        List<int> neighbours = new List<int>();
+
+        for(int i = 0; i < neighbourIDs.Count; i++)
+        {
+            if(transform.parent.GetChild(neighbourIDs[i]).GetComponent<GridScript>()._canMove && transform.parent.GetChild(neighbourIDs[i]).GetComponent<GridScript>()._id != specialGrid)
+            {
+                neighbours.Add(neighbourIDs[i]);
+            }
+        }
+
+        return neighbours;
+    }
+
+    protected internal void DistanceIncreaseNeighbour()
+    {
+        List<int> neighbours = new List<int>();
+
+        for(int i = 0; i < neighbourIDs.Count; i++)
+        {
+            if(transform.parent.GetChild(neighbourIDs[i]).GetComponent<GridScript>()._canMove)
+            {
+                neighbours.Add(neighbourIDs[i]);
+            }
+        }
+
+        foreach(int element in neighbours)
+        {
+            transform.parent.GetChild(element).GetComponent<GridScript>().SendMessage("IncreaseDistance", distance);
+        }
+    }
+
+    protected internal bool HasNeighbour(int node)
+    {
+        List<int> neighbours = GetNeighbour(-1);
+
+        if(neighbours.Contains(node))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private void SetID(int _id)

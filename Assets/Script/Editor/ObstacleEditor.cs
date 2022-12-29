@@ -54,11 +54,13 @@ public class ObstacleEditor : Editor
                 {
                     GUILayout.Label("E", GUILayout.ExpandWidth(true), GUILayout.Width(15), GUILayout.Height(15), 
                     GUILayout.MinWidth(5),GUILayout.MinHeight(5), GUILayout.MaxWidth(18));
+                    toggleData.GetArrayElementAtIndex(id).boolValue = false;
                 }
                 else if(id == playerIndex.intValue)
                 {
                     GUILayout.Label("P", GUILayout.ExpandWidth(true), GUILayout.Width(15), GUILayout.Height(15), 
                     GUILayout.MinWidth(5),GUILayout.MinHeight(5), GUILayout.MaxWidth(18));
+                    toggleData.GetArrayElementAtIndex(id).boolValue = false;
                 }
                 else
                 {

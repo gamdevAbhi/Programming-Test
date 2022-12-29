@@ -6,6 +6,5 @@ using UnityEngine;
 public class ObstacleScriptableObject : ScriptableObject 
 {
     public bool isChanged;
-    public bool runTimeChange;
     public List<bool> obstacleGrid;
 }

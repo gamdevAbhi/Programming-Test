@@ -98,7 +98,5 @@ public class ToggleObstacleScript : MonoBehaviour
         {
             obstacleManager.ChangeToggle(id, isOn);
         }
-
-        obstacleData.runTimeChange = true;
     }
 }

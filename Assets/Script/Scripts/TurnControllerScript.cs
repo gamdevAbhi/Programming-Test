@@ -16,13 +16,21 @@ public class TurnControllerScript : MonoBehaviour
 
     private void Update()
     {
-        if(currentTurn == Turn.Player)
+        if(currentTurn == Turn.Player && playerScript._turnFinish)
         {
             currentTurn = Turn.Enemy;
-        }
-        else if(currentTurn == Turn.Enemy)
-        {
             enemyAIScript.Turn(playerScript._currentIndex);
+        }
+    }
+    protected internal bool isAvailable(int id)
+    {
+        if(id == enemyAIScript._currentIndex)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 }

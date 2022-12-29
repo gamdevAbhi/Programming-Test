@@ -44,6 +44,14 @@ public class ObstacleManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        for(int i = 0; i < maxGrid; i++)
+            {
+                toggleData[i] = obstacleData.obstacleGrid[i];
+            }
+    }
+
     protected internal void ChangeToggle(int id, bool value)
     {
         toggleData[id] = value;
@@ -150,16 +158,6 @@ public class ObstacleManager : MonoBehaviour
             {
                 obstacleData.obstacleGrid.RemoveAt(i);
             }
-        }
-
-        if(obstacleData.runTimeChange == true && Application.isPlaying == false)
-        {
-            for(int i = 0; i < maxGrid; i++)
-            {
-                toggleData[i] = obstacleData.obstacleGrid[i];
-            }
-
-            obstacleData.runTimeChange = false;
         }
         
         for(int i = 0; i < maxGrid; i++)
