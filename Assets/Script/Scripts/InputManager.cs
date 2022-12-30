@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private ToggleObstacleScript toggleObstacleScript;
     [SerializeField] private GridSystemScript gridSystemScript;
     [SerializeField] private GridSizeScriptableObject gridTileObj;
+    [SerializeField] private TurnControllerScript turnControllerScript;
 
     private void Update()
     {
@@ -26,11 +27,11 @@ public class InputManager : MonoBehaviour
     }
     private void CheckKey()
     {
-        if(Input.GetMouseButtonDown(0) && gridSystemScript._selectGrid != null && playerScript._turnFinish)
+        if(Input.GetMouseButtonDown(0) && gridSystemScript._selectGrid != null && turnControllerScript.currentTurn == TurnControllerScript.Turn.None)
         {
             playerScript.SendMessage("SetTargetIndex", gridSystemScript._selectGrid.GetComponent<GridScript>()._id);
         }
-        if(Input.GetKeyDown(KeyCode.Q) && playerScript._turnFinish)
+        if(Input.GetKeyDown(KeyCode.Q) && turnControllerScript.currentTurn == TurnControllerScript.Turn.None)
         {
             EditMode();
         }
@@ -54,11 +55,11 @@ public class InputManager : MonoBehaviour
         {
             DecreaseCamera();
         }
-        else if(Input.GetKeyDown(KeyCode.Z) && playerScript._turnFinish)
+        else if(Input.GetKeyDown(KeyCode.Z) && turnControllerScript.currentTurn == TurnControllerScript.Turn.None)
         {
             ChangeGrid(false);
         }
-        else if(Input.GetKeyDown(KeyCode.X) && playerScript._turnFinish)
+        else if(Input.GetKeyDown(KeyCode.X) && turnControllerScript.currentTurn == TurnControllerScript.Turn.None)
         {
             ChangeGrid(true);
         }
@@ -110,7 +111,7 @@ public class InputManager : MonoBehaviour
 
     protected internal Transform GetCurrentGrid(LayerMask gridLayer)
     {
-        if(_camera.gameObject.active == true && playerScript._turnFinish)
+        if(_camera.gameObject.active == true && turnControllerScript.currentTurn == TurnControllerScript.Turn.None)
         {
             mousePosition = Input.mousePosition;
 

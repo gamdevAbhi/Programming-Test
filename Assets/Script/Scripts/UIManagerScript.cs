@@ -19,11 +19,11 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private Button gridDecrease;
 
     [Header("Script")]
-    [SerializeField] private PlayerScript playerScript;
+    [SerializeField] private TurnControllerScript turnControllerScript;
 
     private void Update()
     {
-        if(playerScript._turnFinish)
+        if(turnControllerScript.currentTurn == TurnControllerScript.Turn.None)
         {
             isomatric.interactable = true;
             cancel.interactable = false;
@@ -31,7 +31,7 @@ public class UIManagerScript : MonoBehaviour
             gridIncrease.interactable = true;
             gridDecrease.interactable = true;
         }
-        else if(!playerScript._turnFinish)
+        else if(turnControllerScript.currentTurn != TurnControllerScript.Turn.None)
         {
             isomatric.interactable = false;
             cancel.interactable = true;

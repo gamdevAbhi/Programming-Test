@@ -84,7 +84,7 @@ public class ObstacleEditor : Editor
         {
             result = "Save Needed";
             isPressed.boolValue = GUILayout.Button("Store Data", GUILayout.ExpandWidth(true), GUILayout.Width(90), GUILayout.Height(20));
-            takeData.boolValue = GUILayout.Button("Take Data", GUILayout.ExpandWidth(true), GUILayout.Width(90), GUILayout.Height(20));
+            takeData.boolValue = GUILayout.Button("Restore Data", GUILayout.ExpandWidth(true), GUILayout.Width(90), GUILayout.Height(20));
         }
         else
         {

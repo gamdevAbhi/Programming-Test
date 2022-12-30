@@ -15,6 +15,7 @@ public class ToggleObstacleScript : MonoBehaviour
     [SerializeField] private ObstacleScriptableObject obstacleData;
     [SerializeField] private PlayerScript playerScript;
     [SerializeField] private ObstacleManager obstacleManager;
+    [SerializeField] private EnemyAIScript enemyAIScript;
 
     int maxToggle = 0;
 
@@ -66,6 +67,21 @@ public class ToggleObstacleScript : MonoBehaviour
         }
     }
 
+    private void SetValue(Transform targetTransform)
+    {
+        foreach(Transform child in targetTransform)
+        {
+            int id = child.GetComponent<GridScript>()._id;
+
+            Toggle toggle = transform.GetChild(id).GetComponent<Toggle>();
+
+            if(obstacleData.obstacleGrid.Count < maxToggle)
+                ToggleChange(id, toggle.isOn);
+            else
+                toggle.isOn = obstacleData.obstacleGrid[id];
+        }
+    }
+
     private void ChangePosition(Transform targetTransform)
     {
         foreach(Transform child in targetTransform)
@@ -91,12 +107,16 @@ public class ToggleObstacleScript : MonoBehaviour
             child.gameObject.SetActive(false);
         }
     }
-
+    
     private void ToggleChange(int id, bool isOn)
     {
-        if(playerScript._currentIndex != id)
+        if(playerScript._currentIndex != id && enemyAIScript._currentIndex != id)
         {
             obstacleManager.ChangeToggle(id, isOn);
+        }
+        else
+        {
+            transform.GetChild(id).GetComponent<Toggle>().isOn = false;
         }
     }
 }

@@ -19,6 +19,7 @@ public class ObstacleManager : MonoBehaviour
     [SerializeField] private ObstacleScriptableObject obstacleData;
     [SerializeField] private EnemyAIScript enemyAIScript;
     [SerializeField] private PlayerScript playerScript;
+    [SerializeField] private ToggleObstacleScript toggleObstacleScript;
 
     [Header("Obstacle Variable")]
     [SerializeField] private float height = 1f;
@@ -56,6 +57,7 @@ public class ObstacleManager : MonoBehaviour
     {
         toggleData[id] = value;
         ObstacleEditSave();
+        GridFix();
     }
 
     private void Update()
@@ -94,6 +96,7 @@ public class ObstacleManager : MonoBehaviour
         if(Application.isPlaying == true)
         {
             ObstacleEdit();
+            GridFix();
         }
 
         #if UNITY_EDITOR
@@ -109,7 +112,7 @@ public class ObstacleManager : MonoBehaviour
 
         if(Application.isPlaying)
         {
-            obstacleData.isChanged = true;
+            toggleObstacleScript.SendMessage("SetValue", gridSystem);
         }
     }
     private void ExecuteEdit()
@@ -171,21 +174,16 @@ public class ObstacleManager : MonoBehaviour
 
     private void ObstacleEdit()
     {
-        if(obstacleData.isChanged == true)
-        {
-            for(int i = 0; i < obstacleData.obstacleGrid.Count; i++)
-            {   
-                if(obstacleData.obstacleGrid[i] == true)
-                {
-                    SpawnObstacle(i);
-                }
-                else
-                {
-                    DestroyObstalce(i);
-                }
+        for(int i = 0; i < obstacleData.obstacleGrid.Count; i++)
+        {   
+            if(obstacleData.obstacleGrid[i] == true && gridSystem.transform.GetChild(i).childCount == 0)
+            {
+                SpawnObstacle(i);
             }
-
-            obstacleData.isChanged = false;
+            else if(obstacleData.obstacleGrid[i] == false && gridSystem.transform.GetChild(i).childCount > 0)
+            {
+                DestroyObstalce(i);
+            }
         }
     }
 
@@ -206,6 +204,14 @@ public class ObstacleManager : MonoBehaviour
         {
             gridSystem.GetChild(id).GetComponent<GridScript>()._canMove = true;
             Destroy(gridSystem.GetChild(id).GetChild(0).gameObject);
+        }
+    }
+
+    private void GridFix()
+    {
+        for(int i = 0; i < gridSystem.transform.childCount; i++)
+        {
+            gridSystem.transform.GetChild(i).GetComponent<GridScript>()._canMove = !obstacleData.obstacleGrid[i];
         }
     }
 }
